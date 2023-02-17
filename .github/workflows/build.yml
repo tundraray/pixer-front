@@ -15,11 +15,11 @@ jobs:
       - run: yarn #install dependencies
       - run: yarn build
         env:
-          "NEXT_PUBLIC_REST_API_ENDPOINT": ""
-          "NEXT_PUBLIC_WEBSITE_URL": ""
-          "NEXT_PUBLIC_ADMIN_URL": ""
-          "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": ""
-          "NEXT_PUBLIC_PAYPAL_CLIENT_TOKEN": ""
+          "NEXT_PUBLIC_REST_API_ENDPOINT": ${{secrets.NEXT_PUBLIC_REST_API_ENDPOINT}}
+          "NEXT_PUBLIC_WEBSITE_URL": "http://localhost:3000"
+          "NEXT_PUBLIC_ADMIN_URL": "http://localhost:3002"
+          "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_12345"
+          "NEXT_PUBLIC_PAYPAL_CLIENT_TOKEN": "pk_12345"
           "NEXT_PUBLIC_AUTH_TOKEN_KEY": "AUTH_CRED"
           "APPLICATION_MODE": "production"
           "NEXT_PUBLIC_DEFAULT_LANGUAGE": "en"
@@ -47,8 +47,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Push Docker Images
         run: |
           export CURRENT_BRANCH=${GITHUB_REF#refs/heads/}
